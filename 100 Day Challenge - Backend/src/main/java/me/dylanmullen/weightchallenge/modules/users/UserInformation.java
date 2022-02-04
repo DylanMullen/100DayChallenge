@@ -106,13 +106,14 @@ public class UserInformation
 			setFatMass(weights[1]);
 			setMuscleMass(weights[2]);
 			setWaterMass(weights[3]);
-			
+
 			SQLTicket ticket = SQLFactory.updateData("users", "id=" + discordID,
 					new String[] { "weight", "fat_mass", "muscle_mass", "water_mass" },
-					new String[] { getWeight() + "", getFatMass() + "", getMuscleMass() + "", getWaterMass() + "" }, null);
+					new String[] { getWeight() + "", getFatMass() + "", getMuscleMass() + "", getWaterMass() + "" },
+					null);
 			SQLFactory.sendTicket(ticket);
 			return true;
-		}catch(Exception e)
+		} catch (Exception e)
 		{
 			return false;
 		}
@@ -140,6 +141,28 @@ public class UserInformation
 
 		updateDatabase(type, value);
 		return true;
+	}
+
+	public void updateAge(int age)
+	{
+		if(getAge() == age)
+			return;
+		
+		setAge(age);
+		SQLTicket ticket = SQLFactory.updateData("users", "id=" + discordID, new String[] { "age" },
+				new String[] { age + "" }, null);
+		SQLFactory.sendTicket(ticket);
+	}
+
+	public void updateHeight(double height)
+	{
+		if(getHeight() == height)
+			return;
+		
+		setHeight(height);
+		SQLTicket ticket = SQLFactory.updateData("users", "id=" + discordID, new String[] { "height" },
+				new String[] { height + "" }, null);
+		SQLFactory.sendTicket(ticket);
 	}
 
 	private void updateDatabase(WeightType type, double value)

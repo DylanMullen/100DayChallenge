@@ -5,6 +5,7 @@ import java.util.Scanner;
 import lombok.Data;
 import lombok.Getter;
 import me.dylanmullen.weightchallenge.modules.authentication.AuthenticationManager;
+import me.dylanmullen.weightchallenge.modules.discord.DiscordManager;
 import me.dylanmullen.weightchallenge.modules.users.UserManager;
 import me.dylanmullen.weightchallenge.util.config.IOManager;
 import me.dylanmullen.weightchallenge.util.mysql.MySQLManager;
@@ -23,6 +24,9 @@ public class App implements Runnable
 	private UserManager userManager;
 	private AuthenticationManager authManager;
 	private MySQLManager mySQLManager;
+	private DiscordManager discordManager;
+	
+	
 
 	public App()
 	{
