@@ -16,6 +16,7 @@ import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
 import lombok.Getter;
+import me.dylanmullen.weightchallenge.core.App;
 import me.dylanmullen.weightchallenge.util.mysql.SQLFactory;
 import me.dylanmullen.weightchallenge.util.mysql.callbacks.SQLCallback;
 import me.dylanmullen.weightchallenge.util.mysql.util.SQLTicket;
@@ -71,6 +72,9 @@ public class AuthenticationManager
 
 	public boolean authorised(long discordID, String authCode)
 	{
+		if(authCode == null)
+			return false;
+		
 		if (!authCodes.containsKey(discordID))
 			return false;
 		return authCodes.get(discordID).equals(authCode);

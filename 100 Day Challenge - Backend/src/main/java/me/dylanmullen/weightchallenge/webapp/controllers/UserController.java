@@ -19,9 +19,10 @@ public class UserController
 {
 
 	@GetMapping
-	public ResponseEntity<JSONObject> getUsers(@RequestHeader("Authorization") String authCode, @RequestParam long discordID)
+	public ResponseEntity<JSONObject> getUsers(@RequestHeader("Authorization") String authCode,
+			@RequestParam long discordID)
 	{
-		if(!isAuthorized(discordID, authCode))
+		if (!App.getInstance().getAuthManager().authorised(discordID, authCode))
 			return new ResponseEntity<>(new JSONObject(), HttpStatus.UNAUTHORIZED);
 
 		return new ResponseEntity<>(App.getInstance().getUserManager().getUsersJSON(), HttpStatus.OK);
@@ -31,7 +32,7 @@ public class UserController
 	public ResponseEntity<JSONObject> getUser(@RequestHeader("Authorization") String authCode, @PathVariable long id,
 			@RequestParam long discordID)
 	{
-		if(!isAuthorized(discordID, authCode))
+		if (!App.getInstance().getAuthManager().authorised(discordID, authCode))
 			return new ResponseEntity<>(new JSONObject(), HttpStatus.UNAUTHORIZED);
 
 		User user = App.getInstance().getUserManager().getUser(id);
@@ -41,12 +42,4 @@ public class UserController
 		return new ResponseEntity<>(user.toJSON(), HttpStatus.OK);
 	}
 
-	private boolean isAuthorized(long discordID, String authCode)
-	{
-		if (authCode == null)
-			return false;
-		
-		return App.getInstance().getAuthManager().authorised(discordID, authCode);
-	}
-	
 }

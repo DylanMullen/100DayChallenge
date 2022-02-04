@@ -13,6 +13,39 @@ import me.dylanmullen.weightchallenge.util.mysql.util.SQLTicket;
 public class UserInformation
 {
 
+	public enum WeightType
+	{
+		WEIGHT("weight", 0), MUSCLE("muscle_mass", 1), FAT("fat_mass", 2), WATER("water_mass", 3);
+
+		private String column;
+		private int id;
+
+		private WeightType(String column, int id)
+		{
+			this.column = column;
+			this.id = id;
+		}
+
+		public String getColumn()
+		{
+			return column;
+		}
+
+		public int getId()
+		{
+			return id;
+		}
+
+		public static WeightType getType(int id)
+		{
+			for (WeightType type : WeightType.values())
+				if (type.id == id)
+					return type;
+			return null;
+		}
+	}
+
+	private long discordID;
 	private int age;
 
 	private double weight;
@@ -23,6 +56,7 @@ public class UserInformation
 
 	public UserInformation(long discordID)
 	{
+		this.discordID = discordID;
 		loadInformation(discordID);
 	}
 
@@ -45,14 +79,14 @@ public class UserInformation
 						{
 							if (!hasEntries())
 								return false;
-							
+
 							setAge(result.getInt("age"));
 							setWeight(result.getDouble("weight"));
 							setHeight(result.getDouble("height"));
 							setMuscleMass(result.getDouble("muscle_mass"));
 							setFatMass(result.getDouble("fat_mass"));
 							setWaterMass(result.getDouble("water_mass"));
-							
+
 						} catch (SQLException e)
 						{
 							// TODO Auto-generated catch block
@@ -61,6 +95,57 @@ public class UserInformation
 						return false;
 					}
 				});
+		SQLFactory.sendTicket(ticket);
+	}
+
+	public boolean setWeights(double[] weights)
+	{
+		try
+		{
+			setWeight(weights[0]);
+			setFatMass(weights[1]);
+			setMuscleMass(weights[2]);
+			setWaterMass(weights[3]);
+			
+			SQLTicket ticket = SQLFactory.updateData("users", "id=" + discordID,
+					new String[] { "weight", "fat_mass", "muscle_mass", "water_mass" },
+					new String[] { getWeight() + "", getFatMass() + "", getMuscleMass() + "", getWaterMass() + "" }, null);
+			SQLFactory.sendTicket(ticket);
+			return true;
+		}catch(Exception e)
+		{
+			return false;
+		}
+	}
+
+	public boolean updateWeights(WeightType type, double value)
+	{
+		switch (type)
+		{
+			case WEIGHT:
+				setWeight(value);
+				break;
+			case FAT:
+				setFatMass(value);
+				break;
+			case MUSCLE:
+				setMuscleMass(value);
+				break;
+			case WATER:
+				setWaterMass(value);
+				break;
+			default:
+				return false;
+		}
+
+		updateDatabase(type, value);
+		return true;
+	}
+
+	private void updateDatabase(WeightType type, double value)
+	{
+		SQLTicket ticket = SQLFactory.updateData("users", "id=" + getDiscordID(), new String[] { type.getColumn() },
+				new String[] { value + "" }, null);
 		SQLFactory.sendTicket(ticket);
 	}
 
@@ -74,7 +159,7 @@ public class UserInformation
 		weightData.put("waterMass", getWaterMass());
 		return weightData;
 	}
-	
+
 	@SuppressWarnings("unchecked")
 	public JSONObject toJSON()
 	{
@@ -84,5 +169,5 @@ public class UserInformation
 		json.put("weight", getWeightJSON());
 		return json;
 	}
-	
+
 }
