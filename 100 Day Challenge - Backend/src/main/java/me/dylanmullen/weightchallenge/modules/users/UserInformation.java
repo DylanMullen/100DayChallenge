@@ -2,6 +2,8 @@ package me.dylanmullen.weightchallenge.modules.users;
 
 import java.sql.SQLException;
 
+import org.json.simple.JSONObject;
+
 import lombok.Data;
 import me.dylanmullen.weightchallenge.util.mysql.SQLFactory;
 import me.dylanmullen.weightchallenge.util.mysql.callbacks.SQLCallback;
@@ -24,6 +26,12 @@ public class UserInformation
 		loadInformation(discordID);
 	}
 
+	/**
+	 * Loads a Users data from the database using their DiscordID to find their row.
+	 * If there is no records, it leaves the data as their default values.
+	 * 
+	 * @param discordID User's DiscordID
+	 */
 	private void loadInformation(long discordID)
 	{
 		SQLTicket ticket = SQLFactory.selectData("users", "*", new String[] { "id" }, new String[] { discordID + "" },
@@ -35,7 +43,7 @@ public class UserInformation
 					{
 						try
 						{
-							if (!result.next())
+							if (!hasEntries())
 								return false;
 							
 							setAge(result.getInt("age"));
@@ -56,4 +64,25 @@ public class UserInformation
 		SQLFactory.sendTicket(ticket);
 	}
 
+	@SuppressWarnings("unchecked")
+	public JSONObject getWeightJSON()
+	{
+		JSONObject weightData = new JSONObject();
+		weightData.put("totalWeight", getWeight());
+		weightData.put("fatMass", getFatMass());
+		weightData.put("muscleMass", getMuscleMass());
+		weightData.put("waterMass", getWaterMass());
+		return weightData;
+	}
+	
+	@SuppressWarnings("unchecked")
+	public JSONObject toJSON()
+	{
+		JSONObject json = new JSONObject();
+		json.put("age", getAge());
+		json.put("height", getHeight());
+		json.put("weight", getWeightJSON());
+		return json;
+	}
+	
 }

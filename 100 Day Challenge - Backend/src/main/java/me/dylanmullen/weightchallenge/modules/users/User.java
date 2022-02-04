@@ -1,5 +1,7 @@
 package me.dylanmullen.weightchallenge.modules.users;
 
+import org.json.simple.JSONObject;
+
 import lombok.Data;
 
 @Data
@@ -13,5 +15,14 @@ public class User
 	{
 		this.discordID = discordID;
 		this.information = new UserInformation(discordID);
+	}
+	
+	@SuppressWarnings("unchecked")
+	public JSONObject toJSON()
+	{
+		JSONObject json = new JSONObject();
+		json.put("discordID", getDiscordID());
+		json.put("userInformation", information.toJSON());
+		return json;
 	}
 }
