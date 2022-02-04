@@ -2,6 +2,7 @@ package me.dylanmullen.weightchallenge.core;
 
 import lombok.Data;
 import lombok.Getter;
+import me.dylanmullen.weightchallenge.modules.authentication.AuthenticationManager;
 import me.dylanmullen.weightchallenge.modules.users.UserManager;
 
 @Data
@@ -15,6 +16,7 @@ public class App implements Runnable
 	private static App instance;
 	
 	private UserManager userManager;
+	private AuthenticationManager authManager;
 
 	public App()
 	{

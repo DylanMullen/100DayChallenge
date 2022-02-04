@@ -25,19 +25,17 @@ public class LoginController
 		{
 			JSONObject json = (JSONObject) new JSONParser().parse(requestBody);
 			String accessToken = (String) json.get("accessToken");
-			long discordID = App.getInstance().getUserManager().authenticateWithDiscord(accessToken);
+			long discordID = App.getInstance().getAuthManager().authenticateWithDiscord(accessToken);
 			
 			if(discordID == -1)
 				return new ResponseEntity<>(new JSONObject(), HttpStatus.BAD_REQUEST);
 			
 			json.clear();
 			json.put("discordID", discordID);
-			json.put("authentication", ""); //TODO: Send Authentication Code;
-			
+			json.put("authentication", App.getInstance().getAuthManager().getAuthCode(discordID));
 			return new ResponseEntity<>(json, HttpStatus.OK);
 		} catch (ParseException e)
 		{
-			e.printStackTrace();
 			return new ResponseEntity<>(new JSONObject(), HttpStatus.BAD_REQUEST);
 		}
 	}
