@@ -12,7 +12,7 @@ import me.dylanmullen.weightchallenge.util.mysql.util.SQLQuery;
 import me.dylanmullen.weightchallenge.util.mysql.util.SQLQuery.ExecutionType;
 import me.dylanmullen.weightchallenge.util.mysql.util.SQLTicket;
 
-public class MySQLController implements Runnable
+public class MySQLManager implements Runnable
 {
 
 	private ArrayList<SQLTicket> queue;
@@ -24,7 +24,7 @@ public class MySQLController implements Runnable
 	private Config config;
 	private SQLDatabase database;
 
-	public MySQLController(Config properties)
+	public MySQLManager(Config properties)
 	{
 		this.queue = new ArrayList<SQLTicket>();
 		this.config = properties;

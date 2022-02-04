@@ -10,13 +10,13 @@ import java.util.List;
  * @project Drinkers Bot
  * @file beer.drinkers.drinkersbot.modules.io.config.ConfigController.java
  */
-public class ConfigController
+public class ConfigManager
 {
 	
 	private File folder;
 	private List<Config> configs;
 
-	public ConfigController(File folder)
+	public ConfigManager(File folder)
 	{
 		this.folder = folder;
 		this.configs = new ArrayList<>();

@@ -24,15 +24,15 @@ public class SQLFactory
 		}
 	}
 
-	private static MySQLController mysql;
+	private static MySQLManager mysql;
 
-	public SQLFactory(MySQLController mySQL)
+	public SQLFactory(MySQLManager mySQL)
 	{
 		if (mysql == null)
 			mysql = mySQL;
 	}
 
-	public static MySQLController getController()
+	public static MySQLManager getController()
 	{
 		return mysql;
 	}
